@@ -1,0 +1,202 @@
+syntax="proto3";
+
+package de.fapra.proto.container;
+
+message RequestCreateEc2Instances {
+  string os = 1;
+  string instanceType =2;
+  string keyName = 3;
+  string secGroup = 4;
+  int32 numberOfInstances = 5;
+  string region = 6;
+  string awsAccessKeyId = 7;
+  string awsSecretAccessKey = 8;
+}
+
+message ResponseCreateEc2Instances {
+  repeated InstanceDescription instances = 1;
+  enum Status {
+    SUCCESS = 0;
+    ERROR = 1;
+   }
+   Status status = 2;
+   string statusmsg = 3;
+}
+
+message InstanceDescription{
+ string id = 1;
+ string publicIp = 2;
+ string publicDns =3;
+}
+
+message RequestDestroyEc2Instance {
+  string instanceId = 1;
+   string region = 2;
+  string awsAccessKeyId = 3;
+  string awsSecretAccessKey = 4;
+}
+
+message ResponseDestroyEc2Instance {
+  string result = 1;
+  enum Status {
+    SUCCESS = 0;
+    ERROR = 1;
+   }
+   Status status = 2;
+   string statusmsg = 3;
+}
+
+message RequestInstanceInfo{
+  string instanceId = 1;
+   string region = 2;
+  string awsAccessKeyId = 3;
+  string awsSecretAccessKey = 4;
+}
+
+message ResponseInstanceInfo {
+  string publicIp = 1;
+  string publicDns = 2;
+  string os = 3;
+  enum Status {
+    SUCCESS = 0;
+    ERROR = 1;
+   }
+   Status status = 4;
+   string statusmsg = 5;
+}
+
+message RequestDeployDB{
+ string os = 1;
+ string hostIp = 2;
+ bytes privateKey = 3;
+ string newUserName = 4;
+ string newUserPw = 5;
+ string dbName = 6;
+}
+
+message ResponseDeployDB{
+ string stdout = 1;
+ string stderr = 2;
+ enum Status {
+ SUCCESS = 0;
+ ERROR = 1;
+  }
+ Status status = 3;
+ string statusmsg = 4;
+}
+
+message RequestDeployApp{
+ string os = 1;
+ string hostIp = 2;
+ bytes privateKey = 3;
+ string dbName = 4;
+ string dbUserName = 5;
+ string dbUserPw = 6;
+ string dbHost = 7;
+}
+
+message ResponseDeployApp{
+ string stdout = 1;
+ string stderr = 2;
+ enum Status {
+ SUCCESS = 0;
+ ERROR = 1;
+  }
+ Status status = 3;
+ string statusmsg = 4;
+}
+
+message RequestConnectAppToDB{
+ string os = 1;
+ string hostIp = 2;
+ bytes privateKey = 3;
+ string dbName = 4;
+ string dbUserName = 5;
+ string dbUserPw = 6;
+ string dbHost = 7;
+}
+
+message ResponseConnectAppToDB{
+ string stdout = 1;
+ string stderr = 2;
+ enum Status {
+ SUCCESS = 0;
+ ERROR = 1;
+  }
+ Status status = 3;
+ string statusmsg = 4;
+}
+
+message RequestBackupDB {
+ string os = 1;
+ string hostIp = 2;
+ bytes privateKey = 3;
+ string ftpHostName = 4;
+ string ftpAbsoluteFileName = 6;
+ string ftpUserName = 7;
+ string ftpUserPw = 8;
+}
+
+message ResponseBackupDB {
+ string stdout = 1;
+ string stderr = 2;
+ enum Status {
+ SUCCESS = 0;
+ ERROR = 1;
+  }
+ Status status = 3;
+ string statusmsg = 4;
+}
+
+message RequestRestoreDB {
+ string os = 1;
+ string hostIp = 2;
+ bytes privateKey = 3;
+ bytes sqlDumpFile = 4;
+ string dbName = 5;
+}
+
+message ResponseRestoreDB {
+ string stdout = 1;
+ string stderr = 2;
+ enum Status {
+ SUCCESS = 0;
+ ERROR = 1;
+  }
+ Status status = 3;
+ string statusmsg = 4;
+}
+
+message RequestApplySaltStateFile {
+ string os = 1;
+ string hostIp = 2;
+ bytes privateKey = 3;
+ bytes stateFile = 4;
+}
+
+message ResponseApplySaltStateFile {
+ string stdout = 1;
+ string stderr = 2;
+ enum Status {
+ SUCCESS = 0;
+ ERROR = 1;
+  }
+ Status status = 3;
+ string statusmsg = 4;
+}
+
+
+
+service GrpcContainer {
+  rpc createEc2Instances(RequestCreateEc2Instances) returns (ResponseCreateEc2Instances);
+  rpc destroyEc2Instance(RequestDestroyEc2Instance) returns (ResponseDestroyEc2Instance);
+  rpc getInstanceDetails(RequestInstanceInfo) returns (ResponseInstanceInfo);
+  rpc deployDb(RequestDeployDB) returns (ResponseDeployDB);
+  rpc deployApp(RequestDeployApp) returns (ResponseDeployApp);
+  rpc connectAppToDb(RequestConnectAppToDB) returns (ResponseConnectAppToDB);
+  rpc backupDb(RequestBackupDB) returns (ResponseBackupDB);
+  rpc restoreDb(RequestRestoreDB) returns (ResponseRestoreDB);
+  rpc applySaltStateFile(RequestApplySaltStateFile) returns (ResponseApplySaltStateFile);
+}
+
+

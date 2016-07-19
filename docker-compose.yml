@@ -17,6 +17,8 @@ services:
       - API_HOST=tssgrpcs32
       - API_PORT=40011
       - API_PROTO_PATH=/api/main.proto
+    volumes:
+      - ./volumeWithProtoFile:/api
     depends_on:
       - grpcdeploymentservice
     command: ["node", "/fapra/graphQlServer.js", "40022"]
