@@ -2,7 +2,7 @@ version: '2'
 services:
 
   grpcdeploymentservice:
-    image: docker pull wilhelmstephan/grpc-api-for-saltstack-deployment-service
+    image: wilhelmstephan/grpc-api-for-saltstack-deployment-service
     ports:
        - "40011:40011"
     command: ["java","-jar","/fapra/gRPCContainer.jar","40011"]
@@ -17,8 +17,8 @@ services:
       - API_HOST=tssgrpcs32
       - API_PORT=40011
       - API_PROTO_PATH=/api/main.proto
-    volumes:
-      - ./volumeWithProtoFile:/api
+    volumes_from:
+      - grpcdeploymentservice
     depends_on:
       - grpcdeploymentservice
     command: ["node", "/fapra/graphQlServer.js", "40022"]
